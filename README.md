@@ -1,1 +1,1 @@
-# yak.unity.ui
+# Unity UI package
