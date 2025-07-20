@@ -1,26 +1,29 @@
 using UnityEditor;
 
-[CustomEditor(typeof(SmartButton), true)]
-[CanEditMultipleObjects]
-public class SmartButtonEditor : Editor
+namespace com.yak.ui
 {
-    private SerializedProperty _interactableProp;
-    private SerializedProperty _navigationProp;
-    private SerializedProperty _onClickProp;
-
-    void OnEnable()
+    [CustomEditor(typeof(SmartButton), true)]
+    [CanEditMultipleObjects]
+    public class SmartButtonEditor : Editor
     {
-        _interactableProp = serializedObject.FindProperty("m_Interactable");
-        _navigationProp = serializedObject.FindProperty("m_Navigation");
-        _onClickProp = serializedObject.FindProperty("m_OnClick");
-    }
+        private SerializedProperty _interactableProp;
+        private SerializedProperty _navigationProp;
+        private SerializedProperty _onClickProp;
 
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-        EditorGUILayout.PropertyField(_interactableProp);
-        EditorGUILayout.PropertyField(_navigationProp);
-        EditorGUILayout.PropertyField(_onClickProp);
-        serializedObject.ApplyModifiedProperties();
+        void OnEnable()
+        {
+            _interactableProp = serializedObject.FindProperty("m_Interactable");
+            _navigationProp = serializedObject.FindProperty("m_Navigation");
+            _onClickProp = serializedObject.FindProperty("m_OnClick");
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            EditorGUILayout.PropertyField(_interactableProp);
+            EditorGUILayout.PropertyField(_navigationProp);
+            EditorGUILayout.PropertyField(_onClickProp);
+            serializedObject.ApplyModifiedProperties();
+        }
     }
 }

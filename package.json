@@ -1,6 +1,6 @@
 {
     "name": "com.yak.ui",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "displayName": "Yak UI",
     "description": "Adds UI prefabs to your unity project!",
     "unity": "2019.1",
