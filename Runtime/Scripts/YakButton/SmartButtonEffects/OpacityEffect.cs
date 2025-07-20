@@ -4,7 +4,7 @@ using UnityEngine;
 namespace com.yak.ui
 {
     [RequireComponent(typeof(CanvasGroup))]
-    public class OpacityChange : ChangeHandle
+    public class OpacityEffect : SmartButtonEffect
     {
         [SerializeField] private float hoverOpacity = 0.5f;
         [SerializeField] private float pressedOpacity = 1f;
@@ -23,7 +23,7 @@ namespace com.yak.ui
             _currentOpacity = _originalOpacity;
         }
 
-        public override void ToOriginal()
+        public override void ToUntouched()
         {
             ClearRoutine();
             StartCoroutine(DoAction(_originalOpacity));

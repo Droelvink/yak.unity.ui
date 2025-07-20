@@ -1,62 +1,122 @@
+using System.Collections;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-namespace com.yak.ui
+namespace com.yak.ui 
 {
-    public class YakButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
+    public class SmartButton : Button
     {
-        private bool _hovering = false;
-        private bool _pressing = false;
-
-        public UnityEvent onClick = new();
+        #region Editor
+        #if UNITY_EDITOR
+            [MenuItem("GameObject/UI/Yak Button", false, 0)]
+            private static void CreateYakButton(MenuCommand menuCommand)
+            {
+                GameObject go = new GameObject("Yak Button");
+                go.AddComponent<Image>();
+                go.AddComponent<SmartButton>();
+                GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
+                Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
+                Selection.activeObject = go;
+            }
+        #endif
+        #endregion
         
-        public void OnPointerEnter(PointerEventData eventData)
+        private bool _hovering;
+        private bool _pressing;
+
+        public override void OnPointerEnter(PointerEventData eventData)
         {
+            base.OnPointerEnter(eventData);
             _hovering = true;
-            ApplyHoverEffects(_pressing ? 2 : 1);
+            ApplyEffects();
+        }
+        
+        public override void OnSelect(BaseEventData eventData)
+        {
+            base.OnSelect(eventData);
+            _hovering = true;
+            ApplyEffects();
         }
 
-        public void OnPointerExit(PointerEventData eventData)
+        public override void OnPointerExit(PointerEventData eventData)
         {
+            base.OnPointerExit(eventData);
             _hovering = false;
-            ApplyHoverEffects(_pressing ? 2 : 0);
+            ApplyEffects();
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public override void OnDeselect(BaseEventData eventData)
         {
-            _pressing = true;
-            ApplyHoverEffects(2);
+            base.OnDeselect(eventData);
+            _hovering = false;
+            ApplyEffects();
         }
 
-        public void OnPointerUp(PointerEventData eventData)
+        public override void OnPointerDown(PointerEventData eventData)
+        {
+            base.OnPointerDown(eventData);
+            _pressing = true;
+            ApplyEffects();
+        }
+        
+        public override void OnPointerUp(PointerEventData eventData)
         {
             _pressing = false;
-            ApplyHoverEffects(_hovering ? 1 : 0);
-            if (_hovering)
-            {
-                onClick?.Invoke();
-            }
+            ApplyEffects();
+        }
+        
+        public override void OnSubmit(BaseEventData eventData)
+        {
+            _pressing = true;
+            ApplyEffects();
+            StartCoroutine(ControllerPressEvent());
         }
 
-        private void ApplyHoverEffects(int effect)
+        private IEnumerator ControllerPressEvent()
         {
-            var effects = GetComponentsInChildren<ChangeHandle>();
+            yield return new WaitForEndOfFrame();
+            _pressing = false;
+            ApplyEffects();
+        }
+
+        private YakButtonState State => _pressing ? YakButtonState.Pressed : _hovering ? YakButtonState.Hovered : YakButtonState.Untouched;
+        
+        private void ApplyEffects()
+        {
+            var effects = GetComponentsInChildren<SmartButtonEffect>();
             foreach (var changeHandle in effects)
             {
-                switch (effect)
+                switch (State)
                 {
                     default:
-                        changeHandle.ToOriginal();
+                    case YakButtonState.Untouched:
+                        changeHandle.ToUntouched();
                         break;
-                    case 1:
+                    case YakButtonState.Hovered:
                         changeHandle.ToHover();
                         break;
-                    case 2:
+                    case YakButtonState.Pressed:
                         changeHandle.ToPressed();
                         break;
                 }
             }
         }
+
+        private enum YakButtonState
+        {
+            Untouched,
+            Hovered,
+            Pressed
+        }
+
+        protected override void OnValidate()
+        {
+            base.OnValidate();
+            transition = Transition.None;
+        }
     }
+
 }
+

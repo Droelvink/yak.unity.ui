@@ -3,7 +3,7 @@ using UnityEngine;
 namespace com.yak.ui
 {
     [RequireComponent(typeof(TMPro.TMP_Text))]
-    public class TextChange : ChangeHandle
+    public class TextEffect : SmartButtonEffect
     {
         [SerializeField] private string hoverText = "";
         [SerializeField] private string pressedText = "";
@@ -19,7 +19,7 @@ namespace com.yak.ui
             _currentText = _originalText;
         }
 
-        public override void ToOriginal()
+        public override void ToUntouched()
         {
             _currentText = _originalText;
             _text.text = _currentText;

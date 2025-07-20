@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace com.yak.ui
 {
     [RequireComponent(typeof(Image))]
-    public class ImageColorChange : ChangeHandle
+    public class ImageColorEffect : SmartButtonEffect
     {
         [SerializeField] private Color hoverColor = new(1,1,1,1);
         [SerializeField] private Color pressedColor = new(0,0,0,1);
@@ -14,20 +14,20 @@ namespace com.yak.ui
         
         private Coroutine _routine;
         private Image _image;
-        private Color _originalColor;
+        private Color _untouchedColor;
         private Color _currentColor;
         
         private void Awake()
         {
             _image = GetComponent<Image>();
-            _originalColor = _image.color;
-            _currentColor = _originalColor;
+            _untouchedColor = _image.color;
+            _currentColor = _untouchedColor;
         }
     
-        public override void ToOriginal()
+        public override void ToUntouched()
         {
             ClearRoutine();
-            StartCoroutine(DoAction(_originalColor));
+            StartCoroutine(DoAction(_untouchedColor));
         }
     
         public override void ToHover()

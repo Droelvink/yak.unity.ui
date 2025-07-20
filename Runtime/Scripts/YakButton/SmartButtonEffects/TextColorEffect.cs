@@ -4,7 +4,7 @@ using UnityEngine;
 namespace com.yak.ui
 {
     [RequireComponent(typeof(TMPro.TMP_Text))]
-    public class TextColorChange : ChangeHandle
+    public class TextColorEffect : SmartButtonEffect
     {
         [SerializeField] private Color hoverColor = new(1,1,1,1);
         [SerializeField] private Color pressedColor = new(0,0,0,1);
@@ -22,7 +22,7 @@ namespace com.yak.ui
             _currentColor = _originalColor;
         }
     
-        public override void ToOriginal()
+        public override void ToUntouched()
         {
             ClearRoutine();
             StartCoroutine(DoAction(_originalColor));
