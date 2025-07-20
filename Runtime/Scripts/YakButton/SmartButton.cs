@@ -69,6 +69,7 @@ namespace com.yak.ui
         
         public override void OnSubmit(BaseEventData eventData)
         {
+            base.OnSubmit(eventData);
             _pressing = true;
             ApplyEffects();
             StartCoroutine(ControllerPressEvent());
