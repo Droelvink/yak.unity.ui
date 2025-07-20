@@ -10,10 +10,10 @@ namespace com.yak.ui
     {
         #region Editor
         #if UNITY_EDITOR
-            [MenuItem("GameObject/UI/Yak Button", false, 0)]
+            [MenuItem("GameObject/UI/Smart Button", false, 0)]
             private static void CreateYakButton(MenuCommand menuCommand)
             {
-                GameObject go = new GameObject("Yak Button");
+                GameObject go = new GameObject("Smart Button");
                 go.AddComponent<Image>();
                 go.AddComponent<SmartButton>();
                 GameObjectUtility.SetParentAndAlign(go, menuCommand.context as GameObject);
