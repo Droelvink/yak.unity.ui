@@ -1,5 +1,6 @@
 using UnityEditor;
 
+#if UNITY_EDITOR
 namespace com.yak.ui
 {
     [CustomEditor(typeof(SmartButton), true)]
@@ -27,3 +28,4 @@ namespace com.yak.ui
         }
     }
 }
+#endif

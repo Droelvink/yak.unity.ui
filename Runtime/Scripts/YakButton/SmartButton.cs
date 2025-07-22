@@ -8,8 +8,8 @@ namespace com.yak.ui
 {
     public class SmartButton : Button
     {
-        #region Editor
-        #if UNITY_EDITOR
+#region Editor
+#if UNITY_EDITOR
             [MenuItem("GameObject/UI/Smart Button", false, 0)]
             private static void CreateYakButton(MenuCommand menuCommand)
             {
@@ -20,8 +20,13 @@ namespace com.yak.ui
                 Undo.RegisterCreatedObjectUndo(go, "Create " + go.name);
                 Selection.activeObject = go;
             }
-        #endif
-        #endregion
+            protected override void OnValidate()
+            {
+                base.OnValidate();
+                transition = Transition.None;
+            }
+#endif
+#endregion
         
         private bool _hovering;
         private bool _pressing;
@@ -110,12 +115,6 @@ namespace com.yak.ui
             Untouched,
             Hovered,
             Pressed
-        }
-
-        protected override void OnValidate()
-        {
-            base.OnValidate();
-            transition = Transition.None;
         }
     }
 
